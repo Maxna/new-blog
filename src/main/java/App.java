@@ -13,6 +13,8 @@ public class App {
 
         get("/", (request, response) -> {
             Map<String, Object> model = new HashMap<String, Object>();
+            ArrayList<Post> posts = Post.getAll();
+            model.put("posts", posts);
             return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -21,14 +23,6 @@ public class App {
             String content = request.queryParams("content");
             Post newPost = new Post(content);
             return new ModelAndView(model, "success.hbs");
-        }, new HandlebarsTemplateEngine());
-
-        get("/", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            ArrayList<Post> posts = Post.getAll();
-            model.put("posts", posts);
-
-            return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
     }
