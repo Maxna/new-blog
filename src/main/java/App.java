@@ -16,18 +16,18 @@ public class App {
 
         get("/posts/new", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            return new ModelAndView(model, "newpost-form.hbs");
+            return new ModelAndView(model, "post-form.hbs");
         }, new HandlebarsTemplateEngine());
 
         get("/", (request, response) -> {
-            Map<String, Object> model = new HashMap<String, Object>();
+            Map<String, Object> model = new HashMap<>();
             ArrayList<Post> posts = Post.getAll();
             model.put("posts", posts);
             return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
-        post("/posts/new", (request, response) -> { //URL to make new post on POST route
-            Map<String, Object> model = new HashMap<String, Object>();
+        post("/posts/new", (request, response) -> {
+            Map<String, Object> model = new HashMap<>();
             String content = request.queryParams("content");
             Post newPost = new Post(content);
             model.put("posts", newPost);
@@ -40,6 +40,23 @@ public class App {
             Post foundPost = Post.findById(idOfPostToFind);
             model.put("post", foundPost);
             return new ModelAndView(model, "post-detail.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        get("posts/:id/update", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            int idOfPostToEdit = Integer.parseInt(req.params("id"));
+            Post editPost = Post.findById(idOfPostToEdit);
+            model.put("editPost", editPost);
+            return new ModelAndView(model, "post-form.hbs");
+        }, new HandlebarsTemplateEngine());
+
+        post("/posts/:id/update", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            String newContent = req.queryParams("content");
+            int idOfPostToEdit = Integer.parseInt(req.params("id"));
+            Post editPost = Post.findById(idOfPostToEdit);
+            editPost.update(newContent);
+            return new ModelAndView(model, "success.hbs");
         }, new HandlebarsTemplateEngine());
 
     }

@@ -1,5 +1,6 @@
 package models;
 
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -78,5 +79,20 @@ public class PostTest {
         Post post = setupNewPost();
         Post otherPost = new Post("How to pair successfully");
         assertEquals(2, Post.findById(otherPost.getId()).getId());
+    }
+
+    @Test
+    public void updateChangesPostContent() throws Exception {
+        Post post = setupNewPost();
+        String formerContent = post.getContent();
+        LocalDateTime formerDate = post.getCreatedAt();
+        int formerId = post.getId();
+
+        post.update("Android: Day 40");
+
+        assertEquals(formerId, post.getId());
+        assertEquals(formerDate, post.getCreatedAt());
+        assertNotEquals(formerContent, post.getContent());
+
     }
 }
