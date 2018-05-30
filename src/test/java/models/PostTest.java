@@ -1,6 +1,7 @@
 package models;
 
 
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -94,5 +95,23 @@ public class PostTest {
         assertEquals(formerDate, post.getCreatedAt());
         assertNotEquals(formerContent, post.getContent());
 
+    }
+
+    @Test
+    public void deleteDeletesASpecificPost() throws Exception {
+        Post post = setupNewPost();
+        Post otherPost = new Post("How to pair successfully");
+        post.deletePost();
+        assertEquals(1, Post.getAll().size());
+        assertEquals(Post.getAll().get(0).getId(), 2);
+    }
+
+    @Test
+    public void deleteAllPostsDeletesAllPosts() throws Exception {
+        Post post = setupNewPost();
+        Post otherPost = setupNewPost();
+
+        Post.clearAllPosts();
+        assertEquals(0, Post.getAll().size());
     }
 }
